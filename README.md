@@ -1,8 +1,8 @@
 # MTCNN 
 MTCNN方法可以概括为：图像金字塔+3阶段级联CNN，如下图所示  
-![output](https://github.com/WwLuo-1024/MTCNN/blob/master/FYPMuQ.png)
+![output](https://github.com/WwLuo-1024/MTCNN/blob/master/FYPMuQ.png)  
 对输入图像建立金字塔是为了检测不同尺度的人脸，通过级联CNN完成对人脸 由粗到细（coarse-to-fine） 的检测，所谓级联指的是 前者的输出是后者的输入，前者往往先使用少量信息做个大致的判断，快速将不是人脸的区域剔除，剩下可能包含人脸的区域交给后面更复杂的网络，利用更多信息进一步筛选，这种由粗到细的方式在保证召回率的情况下可以大大提高筛选效率。下面为MTCNN中级联的3个网络（P-Net、R-Net、O-Net），可以看到它们的网络层数逐渐加深，输入图像的尺寸（感受野）在逐渐变大12→24→48，最终输出的特征维数也在增加32→128→256，意味着利用的信息越来越多。  
-
+![output](https://github.com/WwLuo-1024/MTCNN/blob/master/FYPs4x.png)  
 工作流程是怎样的？
 首先，对原图通过双线性插值构建图像金字塔，可以参看前面的博文《人脸检测中，如何构建输入图像金字塔》。构建好金字塔后，将金字塔中的图像逐个输入给P-Net。    
   ·P-Net：其实是个全卷积神经网络（FCN），前向传播得到的特征图在每个位置是个32维的特征向量，用于判断每个位置处约\(12\times12\)大小的区域内是否包含人脸，如果包含人脸，则回归出人脸的Bounding Box，进一步获得Bounding Box对应到原图中的区域，通过NMS保留分数最高的Bounding box以及移除重叠区域过大的Bounding Box。  
