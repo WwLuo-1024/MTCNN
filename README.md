@@ -8,7 +8,8 @@ MTCNN方法可以概括为：图像金字塔+3阶段级联CNN，如下图所示
   ·P-Net：其实是个全卷积神经网络（FCN），前向传播得到的特征图在每个位置是个32维的特征向量，用于判断每个位置处约\(12\times12\)大小的区域内是否包含人脸，如果包含人脸，则回归出人脸的Bounding Box，进一步获得Bounding Box对应到原图中的区域，通过NMS保留分数最高的Bounding box以及移除重叠区域过大的Bounding Box。  
   ·R-Net：是单纯的卷积神经网络（CNN），先将P-Net认为可能包含人脸的Bounding Box 双线性插值到\(24\times24\)，输入给R-Net，判断是否包含人脸，如果包含人脸，也回归出Bounding Box，同样经过NMS过滤。  
 O-Net：也是纯粹的卷积神经网络（CNN），将R-Net认为可能包含人脸的Bounding Box 双线性插值到\(48\times 48\)，输入给O-Net，进行人脸检测和关键点提取。  
-需要注意的是：  
+需要注意的是：
+  
 1.face classification判断是不是人脸使用的是softmax，因此输出是2维的，一个代表是人脸，一个代表不是人脸  
 2.bounding box regression回归出的是bounding box左上角和右下角的偏移\(dx1, dy1, dx2, dy2\)，因此是4维的  
 3.facial landmark localization回归出的是左眼、右眼、鼻子、左嘴角、右嘴角共5个点的位置，因此是10维的  
